@@ -27,7 +27,7 @@ jobs:
           wget https://buildroot.org/downloads/buildroot-2021.08.tar.gz
           tar -xaf buildroot-2021.08.tar.gz
           cd buildroot-2021.08
-          make BR2_EXTERNAL=../buildroot-solarcampi/buildroot/ solarcampi_defconfig
+          make BR2_EXTERNAL=../SolarCamPi-Buildroot/buildroot/ solarcampi_defconfig
           make -j$(nproc --all)
           gzip output/images/sdcard.img
 
