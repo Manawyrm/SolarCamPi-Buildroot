@@ -1,0 +1,3 @@
+PermitRootLogin yes
+# override default of no subsystems
+Subsystem	sftp	/usr/libexec/sftp-server

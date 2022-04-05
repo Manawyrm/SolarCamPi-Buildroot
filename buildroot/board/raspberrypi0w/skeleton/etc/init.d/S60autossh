@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# autossh        Starts autossh.
+#
+
+start() {
+	printf "Starting autossh: "
+	# -p [PORT]
+	# -l [user]
+	# -M 0 --> no monitoring
+	# -N Just open the connection and do nothing (not interactive)
+	# LOCALPORT:IP_ON_EXAMPLE_COM:PORT_ON_EXAMPLE_COM
+	# 
+	# /boot is a FAT32 partition without permissions, ssh doesn't like that.
+	cp /boot/id_rsa /tmp/id_rsa
+	chmod 600 /tmp/id_rsa
+	/usr/bin/autossh -M 0 -N -q -i /tmp/id_rsa -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -p 22 -R 2256:127.0.0.1:22 tunnel@dna-ev.de &
+	echo "OK"
+}
+stop() {
+	printf "Stopping autossh: "
+	killall autossh
+	echo "OK"
+}
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+
+
