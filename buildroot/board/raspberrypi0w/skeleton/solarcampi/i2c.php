@@ -13,6 +13,7 @@ $registers = [
     "disableTimeout" => ["type" => "uint8_t"],
     "timeout" => ["type" => "uint16_t"],
     "current" => ["type" => "int16_t"],
+    "timestamp" => ["type" => "uint32_t"],
 ];
 
 function i2c_read_all()
@@ -75,6 +76,20 @@ function i2c_read_register($registername)
 
 	switch ($register_definition['type'])
 	{
+		case 'uint32_t':
+			$data0 = i2c_get_raw($offset + 0);
+			$data1 = i2c_get_raw($offset + 1);
+			$data2 = i2c_get_raw($offset + 2);
+			$data3 = i2c_get_raw($offset + 3);
+
+			if (!$data0['success'] || !$data1['success'] || !$data2['success'] || !$data3['success'])
+			{
+				return ['success' => false, 'value' => false];
+			}
+
+			$data = unpack("V", chr($data0['value']) . chr($data1['value']) . chr($data2['value']) . chr($data3['value']))[1];
+			return ['success' => true, 'value' => $data];
+			break;
 		case 'uint16_t':
 			$data0 = i2c_get_raw($offset + 0);
 			$data1 = i2c_get_raw($offset + 1);
@@ -127,6 +142,21 @@ function i2c_write_register($registername, $value)
 
 	switch ($register_definition['type'])
 	{
+		case 'uint32_t':
+			$data = pack("V", $value);
+			$data0 = i2c_set_raw($offset + 0, ord($data[0]));
+			$data1 = i2c_set_raw($offset + 1, ord($data[1]));
+			$data2 = i2c_set_raw($offset + 2, ord($data[2]));
+			$data3 = i2c_set_raw($offset + 3, ord($data[3]));
+
+			if (!$data0['success'] || !$data1['success'] || !$data2['success'] || !$data3['success'])
+			{
+				return ['success' => false, 'value' => false];
+			}
+
+			return ['success' => true];
+			break;
+
 		case 'uint16_t':
 			$data = pack("v", $value);
 			$data0 = i2c_set_raw($offset + 0, ord($data[0]));

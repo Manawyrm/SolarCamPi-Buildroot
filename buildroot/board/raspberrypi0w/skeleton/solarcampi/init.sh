@@ -11,6 +11,8 @@ mount -t sysfs none /sys
 mount -t proc proc /proc
 mount -a
 
+mount
+
 modprobe i2c-bcm2708
 modprobe i2c_dev
 modprobe hwmon
@@ -37,6 +39,8 @@ fi
 
 # this should never happen :)
 # disable power here, let's try again later
+halt -n -f
+# fallback (if gpio-poweroff doesn't work)
 echo 4 > /sys/class/gpio/export
 echo out > /sys/class/gpio/gpio4/direction
 echo 1 > /sys/class/gpio/gpio4/value

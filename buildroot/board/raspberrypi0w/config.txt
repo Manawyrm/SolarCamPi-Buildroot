@@ -31,4 +31,6 @@ dtparam=i2c1=on
 dtparam=i2c_arm=on
 dtparam=spi=on
 
+dtoverlay=gpio-poweroff,gpiopin=4,active_low="y"
+
 #dtoverlay=sdtweak,overclock_50=100

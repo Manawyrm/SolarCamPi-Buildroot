@@ -22,15 +22,20 @@ function log_exception( $e )
 
 function check_for_fatal()
 {
+	global $config;
     $error = error_get_last();
     if ( $error && $error["type"] == E_ERROR )
     {
-    	$post['data'] = json_encode($error, JSON_PRETTY_PRINT);
+    	$data = json_encode($error, JSON_PRETTY_PRINT);
+    	$data = json_decode($data, true);
+		$data['name'] = $config['general']['camera_name'];
+		$data['key'] = $config['general']['key'];
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $config['server']['url'] . "/crash.php");
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, ['data' => $data]);
 		$result = curl_exec($ch);
 		curl_close ($ch);
     }

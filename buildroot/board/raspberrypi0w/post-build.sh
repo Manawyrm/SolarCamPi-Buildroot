@@ -19,6 +19,9 @@ echo "nameserver 8.8.8.8" > ${TARGET_DIR}/etc/resolv.conf
 echo "nameserver 2001:4860:4860::8888" >> ${TARGET_DIR}/etc/resolv.conf
 
 # create the /boot mountpoint
-mkdir ${TARGET_DIR}/boot
+mkdir -p ${TARGET_DIR}/boot
 
 ln -sf ld-2.33.so ${TARGET_DIR}/lib/ld-linux.so.3
+
+mkdir -p "$TARGET_DIR"/root/.ssh
+ln -fs /boot/authorized_keys "$TARGET_DIR"/root/.ssh/authorized_keys

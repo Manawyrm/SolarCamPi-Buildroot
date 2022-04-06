@@ -1,3 +1,7 @@
-PermitRootLogin yes
+PermitRootLogin without-password
+PermitEmptyPasswords no
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+
 # override default of no subsystems
 Subsystem	sftp	/usr/libexec/sftp-server

@@ -1,4 +1,14 @@
 <?php
+
+function downlink_set_clock($queueEntry)
+{
+	// Special funtion: No ACK!
+	if ($queueEntry['json'])
+	{
+		i2c_write_register("timestamp", (int) $queueEntry['json']);
+	}
+}
+
 function downlink_get_registers($queueEntry)
 {
 	server_acknowledge([
@@ -29,8 +39,7 @@ function downlink_fullboot($queueEntry)
 		"id" => $queueEntry['id'],
 		"return" => ["success" => true]
 	]);
-	i2c_write_register("disableTimeout", 1);
-	exit(42);
+	fullboot();
 }
 
 function downlink_get_file_content($queueEntry)
@@ -82,7 +91,7 @@ function downlink_set_file_content($queueEntry)
 			run_log('mount -o remount,rw /');
 		}
 
-		$return = file_put_contents($queueEntry['json']['filename'], $queueEntry['json']['content']);
+		$return = file_put_contents($queueEntry['json']['filename'], $content);
 
 		if (str_starts_with($queueEntry['json']['filename'], "/tmp"))
 		{
@@ -225,10 +234,7 @@ function downlink_avrdude($queueEntry)
 				]
 			]);
 
-			// this will (most likely) not work and the PWR_OVR pin 
-			// has higher priority anyway.
-			i2c_write_register("disableTimeout", 1);
-			exit(42);
+			fullboot();
 		}
 		
 		// disable AVR reset pin

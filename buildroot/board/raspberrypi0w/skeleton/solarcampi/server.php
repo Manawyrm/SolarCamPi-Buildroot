@@ -26,7 +26,9 @@ function server_upload($data, $imagefile)
 function server_acknowledge($data)
 {
 	global $config;
-
+	
+	$data['name'] = $config['general']['camera_name'];
+	$data['key'] = $config['general']['key'];
 	$post['data'] = json_encode($data, JSON_PRETTY_PRINT);
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $config['server']['url'] . "/acknowledge.php");
@@ -54,6 +56,9 @@ function server_handle_response($result)
 
 			switch ($queueEntry['type'])
 			{
+				case 'set_clock':
+					downlink_set_clock($queueEntry);
+					break;
 				case 'avrdude':
 					downlink_avrdude($queueEntry);
 					break;
