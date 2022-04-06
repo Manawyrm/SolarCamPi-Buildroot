@@ -33,7 +33,7 @@ function network_wait_for_gateway()
 		$connected = (strpos($return, "1 packets received") !== false);
 		$timeout++;
 
-		if ($timeout >= 10)
+		if ($timeout >= 30)
 			return false;
 
 		if (!$connected)
