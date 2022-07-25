@@ -26,6 +26,7 @@ modprobe ip_tables
 modprobe x_tables
 modprobe cfg80211
 modprobe ipv6
+modprobe bcm2835-v4l2
 
 rngd -o /dev/random -r /dev/urandom
 

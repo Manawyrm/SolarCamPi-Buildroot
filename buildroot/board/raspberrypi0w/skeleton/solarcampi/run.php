@@ -23,6 +23,7 @@ $server_response = server_upload([
 	"current" => $i2c_current,
 	"picture_log" => $picture['output'] ?? '',
 	"picture_comment" => $picture['comment'] ?? '',
+	"picture_duration" => $picture['duration'] ?? '',
 	"wifi_link" => $wifi_link
 ], $picture['filename']);
 
